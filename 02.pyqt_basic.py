@@ -18,7 +18,7 @@ from PyQt5 import uic
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 # 화면 UI파일
-form_class = uic.loadUiType("main_window.ui")[0]
+form_class = uic.loadUiType("basic_window.ui")[0]
 
 # 사용자UI 클래스 생성 : QMainWindow 상속, ui form 전달
 class MyWindow(QMainWindow, form_class):
@@ -27,9 +27,14 @@ class MyWindow(QMainWindow, form_class):
     def __init__(self):
         # setupUi() 호출하여 UI 구성
         super().__init__()
-        self.setupUi()
+        self.setupUi(self)
         
-
+        # 추가 화면 구성
+        plt.rcParams["font.family"] = 'Malgun Gothic'
+        self.fig = plt.Figure()
+        self.canvas = FigureCanvas(self.fig)
+        self.wgtChart.addWidget(self.canvas)
+        
         # 버튼에 이벤트 함수 연결
         # 송신자 : sender, 시그널/이벤트 생성, clicked/valueChanged
         # 수신자 : receiver, 슬롯/이벤트 핸들러 처리, 사용자가 정의함
@@ -40,18 +45,9 @@ class MyWindow(QMainWindow, form_class):
 
 
     # 이벤트 함수 -------------------------------------------------------------
-    # UI 구성 함수
-    def setupUi(self):
-        super().setupUi(self)
-        
-        plt.rcParams["font.family"] = 'Malgun Gothic'
-        self.fig = plt.Figure()
-        self.canvas = FigureCanvas(self.fig)
-        self.wgtChart.addWidget(self.canvas)
-
-        
     # 위젯 이벤트 처리 함수 정의
     def chk_clicked(self):
+        self.txtName.setText("Msg")
         QMessageBox.about(self, "message", str(self.chkExclude.isChecked()))
 
 
